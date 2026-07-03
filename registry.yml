@@ -25,6 +25,12 @@ skills:
       - path: ~/.claude/commands/vscode-ext-test.md
         mode: symlink
 
+  - name: feature-doc
+    source: skills/workflow/feature-doc.md
+    install_to:
+      - path: ~/.claude/commands/feature-doc.md
+        mode: symlink
+
 # Example entry (uncomment and adapt when adding skills):
 #
 # - name: deep-research
