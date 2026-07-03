@@ -1,0 +1,19 @@
+# Skill Registry
+# Each entry maps a canonical skill file to one or more harness install targets.
+# Paths prefixed with ~/ are absolute. Paths without ~/ are relative to the project root
+# where install.sh is run (for project-scoped installs).
+#
+# mode: symlink (default) — changes to source are immediately live
+# mode: copy — use when the target environment cannot follow symlinks
+
+skills: []
+
+# Example entry (uncomment and adapt when adding skills):
+#
+# - name: deep-research
+#   source: skills/research/deep-research.md
+#   install_to:
+#     - path: ~/.claude/commands/deep-research.md
+#       mode: symlink
+#     - path: agent-os/standards/global/deep-research.md
+#       mode: symlink
