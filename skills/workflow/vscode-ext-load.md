@@ -30,7 +30,17 @@ npm install
 
 ---
 
-## Step 3 — Build and install
+## Step 3 — Run tests (required gate)
+
+Run `/vscode-ext-test`. You must receive a **PASSED** verdict before proceeding.
+
+- If tests fail: surface the failures. Do not package or install. Wait for direction.
+- If test scaffolding is missing: run the scaffold protocol inside `/vscode-ext-test` first, then run tests.
+- There are no exceptions to this gate.
+
+---
+
+## Step 4 — Build and install
 
 Check `package.json` scripts for the fastest path, in this order of preference:
 
@@ -51,7 +61,7 @@ code --install-extension "$(ls -t *.vsix | head -1)"
 
 ---
 
-## Step 4 — Verify installation
+## Step 5 — Verify installation
 
 Run:
 ```bash
@@ -71,7 +81,7 @@ Fix what's wrong and retry before surfacing to the user.
 
 ---
 
-## Step 5 — Reload prompt
+## Step 6 — Reload prompt
 
 VS Code requires a window reload to activate a newly installed or updated extension. After confirming installation, tell the user:
 
