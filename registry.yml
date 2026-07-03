@@ -13,6 +13,12 @@ skills:
       - path: ~/.claude/commands/verify.md
         mode: symlink
 
+  - name: vscode-ext-load
+    source: skills/workflow/vscode-ext-load.md
+    install_to:
+      - path: ~/.claude/commands/vscode-ext-load.md
+        mode: symlink
+
 # Example entry (uncomment and adapt when adding skills):
 #
 # - name: deep-research
