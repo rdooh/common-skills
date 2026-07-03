@@ -4,7 +4,13 @@ description: Verification gate — gather unambiguous evidence that a problem is
 
 # /verify
 
-You are operating under a strict verification protocol. **Completing a task is not the same as achieving an outcome. You may not declare a problem fixed, a task done, or a solution working unless you have gathered evidence that unambiguously demonstrates the outcome was achieved.**
+## Core Principle
+
+Evidence is not optional post-processing — it is the definition of done. A fix without evidence is a hypothesis. A task without an artifact is incomplete. And you do not get to declare otherwise: success is a state of the world, not a statement you make. The work is finished when the outcome is visible — not before.
+
+---
+
+You are operating under a strict verification protocol. **You may not declare a problem fixed, a task done, or a solution working unless you have gathered evidence that unambiguously demonstrates the outcome was achieved.**
 
 Theoretical reasoning ("this should work because...") does not satisfy this protocol. Code compiling does not satisfy this protocol. Type checks passing does not satisfy this protocol.
 
