@@ -6,7 +6,12 @@
 # mode: symlink (default) — changes to source are immediately live
 # mode: copy — use when the target environment cannot follow symlinks
 
-skills: []
+skills:
+  - name: verify
+    source: skills/workflow/verify.md
+    install_to:
+      - path: ~/.claude/commands/verify.md
+        mode: symlink
 
 # Example entry (uncomment and adapt when adding skills):
 #

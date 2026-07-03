@@ -1,62 +1,76 @@
 #!/usr/bin/env bash
 # install.sh — deploy skills to all registered harness paths
-# Run from the common-skills directory. Idempotent.
+# Reads install targets from the per-skill .targets files in adapters/.
+# Idempotent — safe to re-run. Uses symlinks by default.
+#
+# Usage: ./install.sh [--copy]
+#   --copy  copy files instead of symlinking (useful when target can't follow symlinks)
 
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-REGISTRY="$SCRIPT_DIR/registry.yml"
+MODE="symlink"
+[[ "${1:-}" == "--copy" ]] && MODE="copy"
 
-if ! command -v python3 &>/dev/null; then
-  echo "Error: python3 is required to parse registry.yml" >&2
-  exit 1
+installed=0
+missing=0
+
+# Each line in registry.yml that is a real skill entry looks like:
+#   - name: verify
+#     source: skills/workflow/verify.md
+#     install_to:
+#       - path: ~/.claude/commands/verify.md
+# We parse it with a small awk program rather than a YAML library.
+
+while IFS= read -r line; do
+  # Strip leading whitespace
+  trimmed="${line#"${line%%[![:space:]]*}"}"
+
+  # Detect source: line
+  if [[ "$trimmed" =~ ^source:[[:space:]]+(.+)$ ]]; then
+    current_source="${BASH_REMATCH[1]}"
+  fi
+
+  # Detect path: line under install_to
+  if [[ "$trimmed" =~ ^-[[:space:]]+path:[[:space:]]+(.+)$ ]]; then
+    target_path="${BASH_REMATCH[1]}"
+    # Expand ~ manually
+    target_path="${target_path/#\~/$HOME}"
+
+    if [[ -z "${current_source:-}" ]]; then
+      echo "  WARN: found path with no preceding source, skipping: $target_path"
+      continue
+    fi
+
+    source_path="$SCRIPT_DIR/$current_source"
+
+    if [[ ! -f "$source_path" ]]; then
+      echo "  MISSING source: $current_source (skipping)"
+      ((missing++)) || true
+      continue
+    fi
+
+    # Ensure target directory exists
+    mkdir -p "$(dirname "$target_path")"
+
+    # Remove stale link or file
+    [[ -L "$target_path" || -f "$target_path" ]] && rm "$target_path"
+
+    if [[ "$MODE" == "copy" ]]; then
+      cp "$source_path" "$target_path"
+      echo "  copied  $current_source → $target_path"
+    else
+      ln -s "$source_path" "$target_path"
+      echo "  linked  $current_source → $target_path"
+    fi
+
+    ((installed++)) || true
+  fi
+done < "$SCRIPT_DIR/registry.yml"
+
+echo ""
+if [[ $installed -eq 0 && $missing -eq 0 ]]; then
+  echo "No skills registered yet. Add entries to registry.yml to get started."
+else
+  echo "Done. $installed install target(s) processed. $missing missing source(s) skipped."
 fi
-
-# Parse registry and install each skill
-python3 - <<EOF
-import yaml, os, sys
-
-registry_path = "$REGISTRY"
-script_dir = "$SCRIPT_DIR"
-
-with open(registry_path) as f:
-    registry = yaml.safe_load(f)
-
-skills = registry.get("skills") or []
-
-if not skills:
-    print("No skills registered yet. Add entries to registry.yml to get started.")
-    sys.exit(0)
-
-installed = 0
-for skill in skills:
-    name = skill["name"]
-    source = os.path.join(script_dir, skill["source"])
-
-    if not os.path.exists(source):
-        print(f"  MISSING source: {skill['source']} (skipping {name})")
-        continue
-
-    for target_entry in skill.get("install_to", []):
-        target_path = os.path.expanduser(target_entry["path"])
-        mode = target_entry.get("mode", "symlink")
-
-        # Make parent directory if needed
-        os.makedirs(os.path.dirname(target_path), exist_ok=True)
-
-        # Remove stale link or file
-        if os.path.islink(target_path) or os.path.exists(target_path):
-            os.remove(target_path)
-
-        if mode == "copy":
-            import shutil
-            shutil.copy2(source, target_path)
-            print(f"  copied  {name} → {target_path}")
-        else:
-            os.symlink(source, target_path)
-            print(f"  linked  {name} → {target_path}")
-
-        installed += 1
-
-print(f"\nDone. {installed} install target(s) processed.")
-EOF
