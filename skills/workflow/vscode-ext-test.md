@@ -122,35 +122,42 @@ describe('extension', () => {
 });
 ```
 
-**`src/test/integration/index.ts`** — integration test runner entry:
-```ts
-import * as path from 'path';
-import { runTests } from '@vscode/test-electron';
+**`.vscode-test.js`** — test-cli config (at extension root):
+```js
+const { defineConfig } = require('@vscode/test-cli');
+const os = require('os');
+const path = require('path');
 
-async function main() {
-  const extensionDevelopmentPath = path.resolve(__dirname, '../../..');
-  const extensionTestsPath = path.resolve(__dirname, './suite/index');
-  await runTests({ extensionDevelopmentPath, extensionTestsPath });
-}
-
-main().catch(err => { console.error(err); process.exit(1); });
+module.exports = defineConfig({
+  files: 'out/test/integration/suite/**/*.test.js',
+  mocha: { ui: 'tdd', timeout: 10000 },
+  // Short user-data path avoids Unix socket 103-char limit on deep project paths
+  launchArgs: ['--user-data-dir', path.join(os.tmpdir(), 'vsc-test-EXTENSION_NAME')],
+});
 ```
+Replace `EXTENSION_NAME` with a short unique slug.
 
 **`src/test/integration/suite/index.ts`** — Mocha suite loader:
 ```ts
 import * as path from 'path';
+import * as fs from 'fs';
 import Mocha from 'mocha';
-import glob from 'glob';
+
+function findTestFiles(dir: string): string[] {
+  const results: string[] = [];
+  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+    const full = path.join(dir, entry.name);
+    if (entry.isDirectory()) results.push(...findTestFiles(full));
+    else if (entry.name.endsWith('.test.js')) results.push(full);
+  }
+  return results;
+}
 
 export function run(): Promise<void> {
   const mocha = new Mocha({ ui: 'tdd', color: true });
-  const testsRoot = path.resolve(__dirname, '.');
+  for (const f of findTestFiles(path.resolve(__dirname, '.'))) mocha.addFile(f);
   return new Promise((resolve, reject) => {
-    glob('**/**.test.js', { cwd: testsRoot }, (err, files) => {
-      if (err) return reject(err);
-      files.forEach(f => mocha.addFile(path.resolve(testsRoot, f)));
-      mocha.run(failures => failures > 0 ? reject(new Error(`${failures} tests failed`)) : resolve());
-    });
+    mocha.run(failures => failures > 0 ? reject(new Error(`${failures} test(s) failed`)) : resolve());
   });
 }
 ```
@@ -176,12 +183,11 @@ Replace `EXTENSION_NAME` with the extension's `name` from `package.json`.
 
 Add to `devDependencies`:
 ```json
-"@types/glob": "^8.0.0",
 "@types/mocha": "^10.0.0",
-"@vscode/test-electron": "^2.3.0",
-"glob": "^8.0.0",
+"@types/jest": "^29.0.0",
+"@vscode/test-cli": "^0.0.15",
+"@vscode/test-electron": "^3.0.0",
 "jest": "^29.0.0",
-"jest-json-reporter": "^1.2.7",
 "mocha": "^10.0.0",
 "ts-jest": "^29.0.0"
 ```
@@ -189,7 +195,8 @@ Add to `devDependencies`:
 Add to `scripts`:
 ```json
 "test:unit": "jest",
-"test:integration": "node ./out/test/integration/index.js",
+"compile:tests": "tsc -p ./src/test/integration/tsconfig.json",
+"test:integration": "npm run compile:tests && vscode-test",
 "test": "npm run test:unit && npm run test:integration"
 ```
 
