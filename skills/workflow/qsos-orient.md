@@ -12,7 +12,7 @@ An agent that starts implementing without reading the existing documentation is 
 
 ## When this runs
 
-After `/feature-doc` has set a feature `@accepted` and before `/plan` produces an implementation plan. Always runs in sequence — never skipped.
+After `/qsos-feature-doc` has set a feature `@accepted` and before `/qsos-plan` produces an implementation plan. Always runs in sequence — never skipped.
 
 ---
 
@@ -66,7 +66,7 @@ If the DSL file does not exist, note the absence — this is a gap, not a blocke
 
 Check the following conditions and note any that apply:
 
-- Any linked feature file is `@proposed` — **implementation cannot proceed; needs `/feature-doc` first**
+- Any linked feature file is `@proposed` — **implementation cannot proceed; needs `/qsos-feature-doc` first**
 - Any linked ADR has status `Proposed` — **decision is unresolved; surface before planning**
 - The `architecture_updated` field is `false` but the ticket clearly touches the structural model — **flag for review**
 - Any `Target` DSL element has no corresponding `Accepted` ADR — **flag as incomplete**
@@ -100,10 +100,10 @@ GAPS FLAGGED:
 READY FOR /plan: yes | no — <reason if no>
 ```
 
-Do not proceed to `/plan` until the summary shows `READY FOR /plan: yes`.
+Do not proceed to `/qsos-plan` until the summary shows `READY FOR /plan: yes`.
 
 ---
 
 ## Blocking rule
 
-**You may not begin planning if any linked feature file is `@proposed` (not yet `@accepted`).** You may not begin planning if a required ADR has status `Proposed`. An unresolved architectural decision is not a detail to defer — it is a constraint that shapes the plan. Surface the blocker, direct to the right skill (`/feature-doc` or `/architecture`), and stop.
+**You may not begin planning if any linked feature file is `@proposed` (not yet `@accepted`).** You may not begin planning if a required ADR has status `Proposed`. An unresolved architectural decision is not a detail to defer — it is a constraint that shapes the plan. Surface the blocker, direct to the right skill (`/qsos-feature-doc` or `/qsos-architecture`), and stop.

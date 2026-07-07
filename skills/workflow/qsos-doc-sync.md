@@ -12,13 +12,13 @@ Docs that are written before implementation and never updated after it are ficti
 
 ## When this runs
 
-After `/verify` has returned CONFIRMED. This skill does not run if verification is outstanding — closing docs on unverified work is premature.
+After `/qsos-verify` has returned CONFIRMED. This skill does not run if verification is outstanding — closing docs on unverified work is premature.
 
 ---
 
 ## Step 1 — Confirm verification is complete
 
-Check that `/verify` has returned CONFIRMED in this session for the active ticket. If `/verify` has not run or returned UNCONFIRMED or INCONCLUSIVE, stop. State: "Doc sync cannot run until /verify returns CONFIRMED."
+Check that `/qsos-verify` has returned CONFIRMED in this session for the active ticket. If `/qsos-verify` has not run or returned UNCONFIRMED or INCONCLUSIVE, stop. State: "Doc sync cannot run until /verify returns CONFIRMED."
 
 ---
 
@@ -27,7 +27,7 @@ Check that `/verify` has returned CONFIRMED in this session for the active ticke
 Load the feature file(s) linked to the active ticket. The lifecycle tag should be `@in-progress`. If it is:
 
 - `@proposed` — implementation should not have started; note as a process gap
-- `@accepted` — `/implement` should have set this to `@in-progress`; note and correct
+- `@accepted` — `/qsos-implement` should have set this to `@in-progress`; note and correct
 - `@in-progress` — correct; continue
 - `@done` — this skill has already run; confirm this is not a duplicate run
 
@@ -90,7 +90,7 @@ If Strux is not available, note this and proceed with the manual checks above as
 ## Step 7 — Update lifecycle and close ticket
 
 1. Set feature file lifecycle tag to `@done`
-2. Call `/task close <id> <evidence pointer>` — the evidence pointer is the artifact reference from `/verify` (test result path, screenshot, log excerpt, etc.)
+2. Call `/task close <id> <evidence pointer>` — the evidence pointer is the artifact reference from `/qsos-verify` (test result path, screenshot, log excerpt, etc.)
 
 ---
 
@@ -123,4 +123,4 @@ SYNC VERDICT: CLEAN | DRIFT FOUND — <details>
 
 ## Blocking rule
 
-**You may not mark the ticket `done` or the feature `@done` unless `/verify` has returned CONFIRMED.** Do not skip the behavioral drift check — a test suite passing is not the same as every specified scenario being implemented as written. An undocumented architectural decision discovered during this step must be recorded as an ADR before the sync report is marked CLEAN.
+**You may not mark the ticket `done` or the feature `@done` unless `/qsos-verify` has returned CONFIRMED.** Do not skip the behavioral drift check — a test suite passing is not the same as every specified scenario being implemented as written. An undocumented architectural decision discovered during this step must be recorded as an ADR before the sync report is marked CLEAN.

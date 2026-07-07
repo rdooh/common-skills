@@ -87,17 +87,17 @@ State the classification and cite the specific scenario (or its absence).
 - If code is authoritative (better behavior): update the scenario to reflect the actual correct behavior; note the update in a comment or ticket
 - If unclear: surface to the user before changing either
 
-If no feature file existed (absence noted in Step 4), create one now with a `@proposed` tag. Then run `/feature-doc change` to audit and promote it.
+If no feature file existed (absence noted in Step 4), create one now with a `@proposed` tag. Then run `/qsos-feature-doc change` to audit and promote it.
 
 ---
 
-## Step 7 — Run `/feature-doc` audit
+## Step 7 — Run `/qsos-feature-doc` audit
 
-Call `/feature-doc change` on the updated feature file. This runs the 4-check audit: terminology, state assumptions, behavioral contradiction, scope creep. Do not proceed to planning until `/feature-doc` returns GO.
+Call `/qsos-feature-doc change` on the updated feature file. This runs the 4-check audit: terminology, state assumptions, behavioral contradiction, scope creep. Do not proceed to planning until `/qsos-feature-doc` returns GO.
 
 ---
 
-## Step 8 — Hand off to `/plan`
+## Step 8 — Hand off to `/qsos-plan`
 
 Update the ticket:
 - Link the updated feature file (`features:` frontmatter)
@@ -106,7 +106,7 @@ Update the ticket:
 
 Call `/task update` to record the artifact.
 
-Then run `/plan` — do not implement the fix directly. The fix requires an approved plan.
+Then run `/qsos-plan` — do not implement the fix directly. The fix requires an approved plan.
 
 ```
 BUG TRIAGE VERDICT: READY FOR /plan | BLOCKED — <reason>
@@ -124,4 +124,4 @@ TICKET: <id> [ready]
 
 ## Blocking rule
 
-**You may not implement the fix before `/feature-doc` returns GO and `/plan` is approved.** Reproducing the bug and diagnosing it is allowed before touching any docs. But the moment a code change is made to fix it, those docs must already be correct. A bug fix without a corresponding spec update is a fix that will drift again.
+**You may not implement the fix before `/qsos-feature-doc` returns GO and `/qsos-plan` is approved.** Reproducing the bug and diagnosing it is allowed before touching any docs. But the moment a code change is made to fix it, those docs must already be correct. A bug fix without a corresponding spec update is a fix that will drift again.

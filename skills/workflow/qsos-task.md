@@ -12,7 +12,7 @@ Task tracking is not bureaucracy — it is a record that work happened, what it 
 
 ## When this runs
 
-`/task` is not a stage in the chain — it is called by other skills whenever they need to read or write task state. You can also invoke it directly to find eligible work, check a ticket's status, or close a task after verification.
+`/qsos-task` is not a stage in the chain — it is called by other skills whenever they need to read or write task state. You can also invoke it directly to find eligible work, check a ticket's status, or close a task after verification.
 
 Calls from other skills look like:
 - `/task find` — what is eligible to work on?

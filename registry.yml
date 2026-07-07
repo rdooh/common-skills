@@ -7,12 +7,80 @@
 # mode: copy — use when the target environment cannot follow symlinks
 
 skills:
-  - name: verify
-    source: skills/workflow/verify.md
+  # QSOS workflow chain
+  - name: qsos
+    source: skills/workflow/qsos.md
     install_to:
-      - path: ~/.claude/commands/verify.md
+      - path: ~/.claude/commands/qsos.md
         mode: symlink
 
+  - name: qsos-task
+    source: skills/workflow/qsos-task.md
+    install_to:
+      - path: ~/.claude/commands/qsos-task.md
+        mode: symlink
+
+  - name: qsos-brainstorm
+    source: skills/workflow/qsos-brainstorm.md
+    install_to:
+      - path: ~/.claude/commands/qsos-brainstorm.md
+        mode: symlink
+
+  - name: qsos-feature-doc
+    source: skills/workflow/qsos-feature-doc.md
+    install_to:
+      - path: ~/.claude/commands/qsos-feature-doc.md
+        mode: symlink
+
+  - name: qsos-architecture
+    source: skills/workflow/qsos-architecture.md
+    install_to:
+      - path: ~/.claude/commands/qsos-architecture.md
+        mode: symlink
+
+  - name: qsos-orient
+    source: skills/workflow/qsos-orient.md
+    install_to:
+      - path: ~/.claude/commands/qsos-orient.md
+        mode: symlink
+
+  - name: qsos-plan
+    source: skills/workflow/qsos-plan.md
+    install_to:
+      - path: ~/.claude/commands/qsos-plan.md
+        mode: symlink
+
+  - name: qsos-implement
+    source: skills/workflow/qsos-implement.md
+    install_to:
+      - path: ~/.claude/commands/qsos-implement.md
+        mode: symlink
+
+  - name: qsos-verify
+    source: skills/workflow/qsos-verify.md
+    install_to:
+      - path: ~/.claude/commands/qsos-verify.md
+        mode: symlink
+
+  - name: qsos-doc-sync
+    source: skills/workflow/qsos-doc-sync.md
+    install_to:
+      - path: ~/.claude/commands/qsos-doc-sync.md
+        mode: symlink
+
+  - name: qsos-bug
+    source: skills/workflow/qsos-bug.md
+    install_to:
+      - path: ~/.claude/commands/qsos-bug.md
+        mode: symlink
+
+  - name: qsos-chain-design
+    source: skills/workflow/qsos-chain-design.md
+    install_to:
+      - path: ~/.claude/commands/qsos-chain-design.md
+        mode: symlink
+
+  # Domain-specific tools (not QSOS chain skills)
   - name: vscode-ext-load
     source: skills/workflow/vscode-ext-load.md
     install_to:
@@ -23,72 +91,6 @@ skills:
     source: skills/workflow/vscode-ext-test.md
     install_to:
       - path: ~/.claude/commands/vscode-ext-test.md
-        mode: symlink
-
-  - name: feature-doc
-    source: skills/workflow/feature-doc.md
-    install_to:
-      - path: ~/.claude/commands/feature-doc.md
-        mode: symlink
-
-  - name: SKILL-CHAIN-DESIGN
-    source: skills/workflow/SKILL-CHAIN-DESIGN.md
-    install_to:
-      - path: ~/.claude/commands/SKILL-CHAIN-DESIGN.md
-        mode: symlink
-
-  - name: task
-    source: skills/workflow/task.md
-    install_to:
-      - path: ~/.claude/commands/task.md
-        mode: symlink
-
-  - name: brainstorm
-    source: skills/workflow/brainstorm.md
-    install_to:
-      - path: ~/.claude/commands/brainstorm.md
-        mode: symlink
-
-  - name: orient
-    source: skills/workflow/orient.md
-    install_to:
-      - path: ~/.claude/commands/orient.md
-        mode: symlink
-
-  - name: plan
-    source: skills/workflow/plan.md
-    install_to:
-      - path: ~/.claude/commands/plan.md
-        mode: symlink
-
-  - name: architecture
-    source: skills/workflow/architecture.md
-    install_to:
-      - path: ~/.claude/commands/architecture.md
-        mode: symlink
-
-  - name: implement
-    source: skills/workflow/implement.md
-    install_to:
-      - path: ~/.claude/commands/implement.md
-        mode: symlink
-
-  - name: doc-sync
-    source: skills/workflow/doc-sync.md
-    install_to:
-      - path: ~/.claude/commands/doc-sync.md
-        mode: symlink
-
-  - name: bug
-    source: skills/workflow/bug.md
-    install_to:
-      - path: ~/.claude/commands/bug.md
-        mode: symlink
-
-  - name: qsos
-    source: skills/workflow/qsos.md
-    install_to:
-      - path: ~/.claude/commands/qsos.md
         mode: symlink
 
 # Example entry (uncomment and adapt when adding skills):

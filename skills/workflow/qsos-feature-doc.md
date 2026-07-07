@@ -56,7 +56,7 @@ If either directory is missing, create it. If the project has no `docs/` folder 
 
 Draft a feature file. Do not write implementation code until this draft has been reviewed and accepted.
 
-The file should follow Gherkin syntax and must begin with the `@proposed` lifecycle tag. `/brainstorm` may have already created this file with `@proposed` — if so, your job in this skill is to audit it and promote the tag to `@accepted`.
+The file should follow Gherkin syntax and must begin with the `@proposed` lifecycle tag. `/qsos-brainstorm` may have already created this file with `@proposed` — if so, your job in this skill is to audit it and promote the tag to `@accepted`.
 
 ```gherkin
 @proposed
@@ -73,10 +73,10 @@ Feature: <short name>
 ```
 
 Lifecycle tags:
-- `@proposed` — set by `/brainstorm` (or by this skill when no brainstorm was run). Draft state; not yet approved for implementation.
+- `@proposed` — set by `/qsos-brainstorm` (or by this skill when no brainstorm was run). Draft state; not yet approved for implementation.
 - `@accepted` — set by this skill when the audit passes and the verdict is GO. Implementation may proceed.
-- `@in-progress` — set by `/implement` when coding begins.
-- `@done` — set by `/doc-sync` after `/verify` returns CONFIRMED.
+- `@in-progress` — set by `/qsos-implement` when coding begins.
+- `@done` — set by `/qsos-doc-sync` after `/qsos-verify` returns CONFIRMED.
 
 When this skill returns GO, update the tag from `@proposed` to `@accepted` before finalizing the file.
 
@@ -179,7 +179,7 @@ If feasibility is genuinely unknown before a feature file can be written meaning
 
 1. State explicitly that this is a spike, not implementation.
 2. Spike output stays out of the main branch — a separate branch or scratch directory only.
-3. Once feasibility is established, run `/feature-doc` in `new` mode before any spike findings become implementation.
+3. Once feasibility is established, run `/qsos-feature-doc` in `new` mode before any spike findings become implementation.
 
 A spike that quietly becomes implementation without this step is a violation of the protocol.
 

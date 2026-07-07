@@ -12,7 +12,7 @@ A plan that exists only in an agent's head is not a plan — it is an intention.
 
 ## When this runs
 
-After `/orient` has loaded context and confirmed `READY FOR /plan: yes`. Always before `/implement`.
+After `/qsos-orient` has loaded context and confirmed `READY FOR /plan: yes`. Always before `/qsos-implement`.
 
 ---
 
@@ -20,8 +20,8 @@ After `/orient` has loaded context and confirmed `READY FOR /plan: yes`. Always 
 
 Call `/task read` with the active ticket ID. Confirm:
 
-- Feature file(s) are `@accepted` — if any are `@proposed`, redirect to `/feature-doc` and stop
-- All linked ADRs have status `Accepted` — if any are `Proposed`, redirect to `/architecture` and stop
+- Feature file(s) are `@accepted` — if any are `@proposed`, redirect to `/qsos-feature-doc` and stop
+- All linked ADRs have status `Accepted` — if any are `Proposed`, redirect to `/qsos-architecture` and stop
 - No open blocking dependencies (`depends_on:` tickets are all `done` or absent)
 - `architecture_updated` field is populated (not necessarily `true`, but a conscious decision has been made)
 
@@ -98,4 +98,4 @@ Do not write any implementation code. Do not proceed past this output until the 
 
 ## Blocking rule
 
-**You may not write a single line of implementation code before the user has approved this plan.** If the feature file is not `@accepted`, there is nothing to plan — redirect to `/feature-doc`. If a scenario has no deliverable mapped to it, the plan is incomplete — fix it before presenting. Presenting a plan and then immediately implementing it without waiting for a response is not approval.
+**You may not write a single line of implementation code before the user has approved this plan.** If the feature file is not `@accepted`, there is nothing to plan — redirect to `/qsos-feature-doc`. If a scenario has no deliverable mapped to it, the plan is incomplete — fix it before presenting. Presenting a plan and then immediately implementing it without waiting for a response is not approval.

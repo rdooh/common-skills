@@ -12,7 +12,7 @@ Ideas without structure are not specifications. Before a single line of code is 
 
 ## When this runs
 
-At the very beginning of new work. Before `/feature-doc`. Before `/plan`. Before any code.
+At the very beginning of new work. Before `/qsos-feature-doc`. Before `/qsos-plan`. Before any code.
 
 If you arrive at this skill mid-implementation, stop — implementation should not have started without these artifacts. Surface the gap before continuing.
 
@@ -34,7 +34,7 @@ If neither directory exists, note that this appears to be a new project and proc
 Ask the following, in order, waiting for a response before moving on:
 
 1. **What are we building?** Describe the feature or change in plain language.
-2. **Is this new behavior or a change to existing behavior?** (New feature / modifying existing / fixing a bug — if bug, use `/bug` instead)
+2. **Is this new behavior or a change to existing behavior?** (New feature / modifying existing / fixing a bug — if bug, use `/qsos-bug` instead)
 3. **What is the expected outcome when this is done?** What will a user be able to do that they couldn't before, or what will work that was broken?
 4. **Are there any constraints, dependencies, or things that must not change?**
 
@@ -46,7 +46,7 @@ If the answers are vague, ask one follow-up to sharpen them. Do not ask more tha
 
 Using the context loaded in Step 1, assess:
 
-- **Overlap** — does this idea describe behavior already covered (fully or partially) by an existing feature file? If yes, this may be a `change` — redirect to `/feature-doc` in `change` mode instead.
+- **Overlap** — does this idea describe behavior already covered (fully or partially) by an existing feature file? If yes, this may be a `change` — redirect to `/qsos-feature-doc` in `change` mode instead.
 - **Conflict** — does this idea contradict an existing ADR? (e.g. choosing a different persistence strategy than one already decided) If yes, surface the conflict before proceeding. Do not draft a feature file that assumes a decision that contradicts an existing ADR.
 - **Vocabulary mismatch** — does the user's description use different terms for concepts that existing feature files name differently? Align on the correct terms now, before they are embedded in the draft.
 

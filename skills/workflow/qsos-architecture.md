@@ -12,7 +12,7 @@ The architecture model is not a diagram — it is a claim about the system. Ever
 
 ## When this runs
 
-When a feature introduces a new container, component, or relationship. When a `Target` element has been implemented and should be promoted to `Current`. When an architectural decision is being made that changes the structural model. May run in parallel with `/feature-doc` — architecture and feature specification are sibling concerns, not sequential.
+When a feature introduces a new container, component, or relationship. When a `Target` element has been implemented and should be promoted to `Current`. When an architectural decision is being made that changes the structural model. May run in parallel with `/qsos-feature-doc` — architecture and feature specification are sibling concerns, not sequential.
 
 ---
 

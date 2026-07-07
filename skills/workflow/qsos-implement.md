@@ -6,19 +6,19 @@ description: Implementation contract — enter the coding phase with an approved
 
 ## Core Principle
 
-Implementation without a plan is exploration. Exploration is valuable — but it is not implementation. This skill is a one-page contract: you have a plan, it has been approved, and your job is to execute it faithfully. Deviations are not forbidden — they are flagged before continuing, not after. Nothing is "done" here. Done is `/verify`'s word.
+Implementation without a plan is exploration. Exploration is valuable — but it is not implementation. This skill is a one-page contract: you have a plan, it has been approved, and your job is to execute it faithfully. Deviations are not forbidden — they are flagged before continuing, not after. Nothing is "done" here. Done is `/qsos-verify`'s word.
 
 ---
 
 ## When this runs
 
-After `/plan` has produced a plan and the user has approved it. Before `/test` and `/verify`.
+After `/qsos-plan` has produced a plan and the user has approved it. Before `/test` and `/qsos-verify`.
 
 ---
 
 ## Step 1 — Confirm plan exists and is approved
 
-Verify that a `/plan` output is present in context and that the user has explicitly approved it. If no plan exists, redirect to `/plan` and stop. If a plan exists but approval is ambiguous, ask before writing a single line of code.
+Verify that a `/qsos-plan` output is present in context and that the user has explicitly approved it. If no plan exists, redirect to `/qsos-plan` and stop. If a plan exists but approval is ambiguous, ask before writing a single line of code.
 
 State the plan reference: which ticket, which feature file, how many items in the plan.
 
@@ -81,10 +81,10 @@ DEVIATIONS: none | <list>
 Next step: run /test then /verify
 ```
 
-Then run `/verify` (or `/test` first if a test skill applies — e.g. `/vscode-ext-test` for VS Code extensions).
+Then run `/qsos-verify` (or `/test` first if a test skill applies — e.g. `/vscode-ext-test` for VS Code extensions).
 
 ---
 
 ## Blocking rule
 
-**You may not begin writing code without an approved plan.** You may not declare implementation complete without a CONFIRMED verdict from `/verify`. You may not skip the cross-file impact check — an undisclosed change is a hidden risk. Any deviation from the approved plan must be surfaced before the deviated change is made, not discovered during review afterward.
+**You may not begin writing code without an approved plan.** You may not declare implementation complete without a CONFIRMED verdict from `/qsos-verify`. You may not skip the cross-file impact check — an undisclosed change is a hidden risk. Any deviation from the approved plan must be surfaced before the deviated change is made, not discovered during review afterward.
