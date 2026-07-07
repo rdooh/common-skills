@@ -31,6 +31,12 @@ skills:
       - path: ~/.claude/commands/feature-doc.md
         mode: symlink
 
+  - name: SKILL-CHAIN-DESIGN
+    source: skills/workflow/SKILL-CHAIN-DESIGN.md
+    install_to:
+      - path: ~/.claude/commands/SKILL-CHAIN-DESIGN.md
+        mode: symlink
+
 # Example entry (uncomment and adapt when adding skills):
 #
 # - name: deep-research
