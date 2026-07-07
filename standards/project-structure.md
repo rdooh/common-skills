@@ -65,6 +65,9 @@ work/                              — point-in-time work (transient)
     screenshots/                   — optional: UI evidence
     evidence/                      — optional: verify runs, test output
     logs/                          — optional: debug output (typically git-ignored)
+
+.audit-baseline.json               — optional: acknowledged pre-existing violations (see below)
+logs/                              — tool status files and diagnostic reports (git-ignored)
 ```
 
 Each top-level directory carries a `README.md` that self-identifies its quadrant role.
@@ -327,6 +330,21 @@ JSON Schema (draft-07). Defines data shape at a component boundary.
 
 ### Format
 JSON, XState-compatible. Models the lifecycle of a process or entity.
+
+---
+
+## Audit Baseline
+
+`.audit-baseline.json` is an optional file at the project root. It exists only when a project adopts QSOS standards against an existing codebase that already has violations.
+
+**What it does:** Records pre-existing violations at adoption time so the compliance tooling suppresses them rather than failing the build on day one. New violations — in new files or introduced into edited files — always fail immediately. Baseline entries are removed progressively as the team fixes the legacy issues.
+
+**What agents should know:**
+- If the file exists, do not treat it as a problem or flag it as unknown
+- Do not create it unless explicitly asked — it is a human decision to acknowledge legacy violations
+- Do not add entries to it during normal workflow — it is not a way to suppress legitimate new failures
+
+The file is committed to version control so all contributors share the same suppression set.
 
 ---
 
