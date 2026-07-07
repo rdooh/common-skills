@@ -85,6 +85,12 @@ skills:
       - path: ~/.claude/commands/bug.md
         mode: symlink
 
+  - name: qsos
+    source: skills/workflow/qsos.md
+    install_to:
+      - path: ~/.claude/commands/qsos.md
+        mode: symlink
+
 # Example entry (uncomment and adapt when adding skills):
 #
 # - name: deep-research
