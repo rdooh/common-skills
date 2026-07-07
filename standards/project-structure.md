@@ -40,7 +40,7 @@ This model is defined in Strux ADR-023 and is the authority for all QSOS-governe
 
 **Strux** monitors artifacts *after the fact* and reports violations — descriptive and reactive.
 
-They are complementary. As Strux matures, skills delegate their audit steps to it (e.g. `/doc-sync` running `strux diagnose`). Until then, skills perform lightweight manual checks.
+They are complementary. As compliance tooling matures, skills delegate their audit steps to it (e.g. `/qsos-doc-sync` delegating to installed tooling). Until then, `/qsos-audit` covers the most important checks manually.
 
 ---
 

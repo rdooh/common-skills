@@ -54,7 +54,7 @@ Map ticket and feature state to the next skill in the chain:
 
 State the entry point and the reasoning in one line:
 
-> "TIX-007 is ready with an accepted feature file and no plan — entering at /orient."
+> "TIX-007 is ready with an accepted feature file and no plan — entering at /qsos-orient."
 
 Then confirm with the user: "Proceed?" and continue unless redirected.
 
@@ -77,12 +77,12 @@ Do not stop between skills when the path is clear. The user said "take it to the
 After each skill completes, emit a one-line status before moving on:
 
 ```
-✓ /orient — context loaded, no gaps
-✓ /plan — presented, awaiting approval
+✓ /qsos-orient — context loaded, no gaps
+✓ /qsos-plan — presented, awaiting approval
   [user approves]
-✓ /implement — all plan items executed
-✓ /verify — CONFIRMED (test results: test-results/unit.json)
-✓ /doc-sync — CLEAN, TIX-007 closed
+✓ /qsos-implement — all plan items executed
+✓ /qsos-verify — CONFIRMED (test results: test-results/unit.json)
+✓ /qsos-doc-sync — CLEAN, TIX-007 closed
 ```
 
 ---
