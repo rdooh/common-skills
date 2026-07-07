@@ -56,9 +56,10 @@ If either directory is missing, create it. If the project has no `docs/` folder 
 
 Draft a feature file. Do not write implementation code until this draft has been reviewed and accepted.
 
-The file should follow Gherkin syntax:
+The file should follow Gherkin syntax and must begin with the `@proposed` lifecycle tag. `/brainstorm` may have already created this file with `@proposed` — if so, your job in this skill is to audit it and promote the tag to `@accepted`.
 
 ```gherkin
+@proposed
 Feature: <short name>
   <one or two sentences describing the purpose and value of this feature>
 
@@ -70,6 +71,14 @@ Feature: <short name>
   Scenario: <a meaningful edge case or error path>
     ...
 ```
+
+Lifecycle tags:
+- `@proposed` — set by `/brainstorm` (or by this skill when no brainstorm was run). Draft state; not yet approved for implementation.
+- `@accepted` — set by this skill when the audit passes and the verdict is GO. Implementation may proceed.
+- `@in-progress` — set by `/implement` when coding begins.
+- `@done` — set by `/doc-sync` after `/verify` returns CONFIRMED.
+
+When this skill returns GO, update the tag from `@proposed` to `@accepted` before finalizing the file.
 
 - Use the same terminology (nouns, verbs) as existing feature files. Read them before writing.
 - Each scenario should be independently understandable — no implicit shared state between scenarios unless a Background block is used.
