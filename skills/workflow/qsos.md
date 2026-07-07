@@ -26,7 +26,7 @@ Any of these work:
 
 Load the following:
 
-1. All tickets in `tickets/` (or active Jira project) — note each status
+1. All tickets in `work/` (or active Jira project) — note each status
 2. All feature files in `docs/features/` — note lifecycle tags
 3. Any `/plan` output present in the current context
 4. Any `/verify` verdict present in the current context

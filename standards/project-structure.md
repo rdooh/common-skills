@@ -1,10 +1,9 @@
 # Project Structure Standards
 
 This document is the canonical reference for how projects in this ecosystem are structured. It defines:
-- What artifact families exist
-- Where they live
-- What format they use
-- How they relate to each other
+- What artifact families exist and where they live
+- The document-space quadrant model
+- Artifact formats, lifecycle tags, and cross-artifact relationships
 - How skills use them
 - How Strux monitors them
 
@@ -12,52 +11,74 @@ Every skill in `common-skills` that touches documentation, architecture, or task
 
 ---
 
-## The Skill–Strux Division of Labour
+## The Document-Space Quadrant Model
 
-**Common-skills** tells agents *how to produce correct artifacts* — it is prescriptive and proactive.
+All project artifacts fall on two axes:
 
-**Strux** monitors artifacts *after the fact* and reports violations — it is descriptive and reactive.
+**Axis 1: Durable vs. Point-in-time**
+- *Durable* — describes what the system is, was decided, or formally attests to. Read long after it was written.
+- *Point-in-time* — relevant during active work. Value decays after the work closes.
 
-They are complementary, not overlapping. As Strux matures, skills will delegate their audit steps to it (e.g. `/doc-sync` running `strux diagnose` rather than doing its own diffing). Until then, skills perform lightweight manual checks.
+**Axis 2: Specification vs. Evidence**
+- *Specification* — claims about what should be true (features, decisions, architecture)
+- *Evidence* — proof that something was true at a specific moment (test results, screenshots, release attestations)
+
+| | Durable | Point-in-time |
+|---|---|---|
+| **Specification** | `docs/` | *(empty — git history serves this role)* |
+| **Evidence** | `docs/releases/` | `work/<ticket-folder>/` |
+
+**The fourth quadrant is intentionally empty.** Point-in-time specification is answered by `git log`, not a folder. Store the current truth; use version control as the time machine.
+
+This model is defined in Strux ADR-023 and is the authority for all QSOS-governed projects.
 
 ---
 
-## Standard Project Docs Layout
+## The Skill–Strux Division of Labour
 
-Every project is expected to have this structure under its root:
+**Common-skills (QSOS)** tells agents *how to produce correct artifacts* — prescriptive and proactive.
+
+**Strux** monitors artifacts *after the fact* and reports violations — descriptive and reactive.
+
+They are complementary. As Strux matures, skills delegate their audit steps to it (e.g. `/doc-sync` running `strux diagnose`). Until then, skills perform lightweight manual checks.
+
+---
+
+## Standard Project Layout
 
 ```
-docs/
-  features/         # Gherkin .feature files — one per feature area
-  decisions/        # MADR-formatted ADR files
+docs/                              — durable specification + durable evidence
+  features/                        — Gherkin feature files
+  decisions/                       — MADR ADRs
   architecture/
-    architecture.dsl          # Structurizr DSL — single source of truth
-    diagrams/                 # Generated Mermaid views (do not edit manually)
-      container.mermaid
-      container-target.mermaid
-      system-context.mermaid
-      system-context-target.mermaid
-  contracts/        # JSON Schema contract files
-  statecharts/      # JSON statechart files
-  standards/        # Project-specific standards and linting reports
-tickets/            # TIX markdown tickets (if using TIX medium)
-  tix-manifest.json
+    architecture.dsl               — Structurizr DSL (single source of truth)
+    diagrams/                      — Generated Mermaid views (never edit manually)
+  contracts/                       — JSON Schema contract files
+  statecharts/                     — XState-compatible statechart files
+  releases/                        — formal release attestations
+  standards/                       — project-specific standards and linting reports
+
+work/                              — point-in-time work (transient)
+  tix-manifest.json                — compiled ticket registry (auto-generated)
+  TIX-NNN-slug/                    — one folder per ticket
+    ticket.md                      — always present; frontmatter + description
+    screenshots/                   — optional: UI evidence
+    evidence/                      — optional: verify runs, test output
+    logs/                          — optional: debug output (typically git-ignored)
 ```
 
-If a project uses a different ticket medium (Jira, local plan), the `tickets/` directory may be absent. See the Task Tracking section.
+Each top-level directory carries a `README.md` that self-identifies its quadrant role.
 
 ---
 
 ## Artifact Families
-
-There are three groups of artifacts. Each group answers a different question.
 
 ### Group 1 — Requirements + Features
 *What does the system do, from the user's perspective?*
 
 | Artifact | Location | Format | Strux sensor |
 |---|---|---|---|
-| Ticket | `tickets/TIX-NNN-slug.md` | Markdown with YAML frontmatter | `strux-tix` |
+| Ticket | `work/TIX-NNN-slug/ticket.md` | Markdown with YAML frontmatter | `strux-tix` |
 | Feature file | `docs/features/feature-name.feature` | Gherkin + lifecycle tags | `gherkin-rules` |
 
 ### Group 2 — Architecture + Decisions
@@ -74,7 +95,14 @@ There are three groups of artifacts. Each group answers a different question.
 | Artifact | Location | Format | Strux sensor |
 |---|---|---|---|
 | Contract | `docs/contracts/CON-NNN-slug.contract.json` | JSON Schema | `contract-rules` |
-| Statechart | `docs/statecharts/STATE-NNN-slug.statechart.json` | JSON (XState-compatible) | `statechart-rules` |
+| Statechart | `docs/statecharts/STATE-NNN-slug.statechart.json` | XState JSON | `statechart-rules` |
+
+### Group 4 — Release Evidence
+*What was formally attested at a specific version?*
+
+| Artifact | Location | Format |
+|---|---|---|
+| Release attestation | `docs/releases/v{version}.md` | Markdown — version, date, evidence pointers |
 
 ---
 
@@ -106,15 +134,14 @@ Feature: [Feature Title]
 ```
 
 ### Lifecycle tags
-Feature files carry a lifecycle tag at the top of the file:
 
-| Tag | Meaning |
-|---|---|
-| `@proposed` | Draft — under discussion, not yet approved for implementation |
-| `@accepted` | Approved — implementation may proceed |
-| `@in-progress` | Currently being implemented |
-| `@done` | Implemented and verified |
-| `@deprecated` | No longer active |
+| Tag | Set by | Meaning |
+|---|---|---|
+| `@proposed` | `/brainstorm` | Draft — under discussion, not yet approved |
+| `@accepted` | `/feature-doc` | Approved — implementation may proceed |
+| `@in-progress` | `/implement` | Currently being implemented |
+| `@done` | `/doc-sync` | Implemented and verified |
+| `@deprecated` | `/doc-sync` | No longer active |
 
 **Rule:** A feature file must be `@accepted` before implementation begins. It must not move to `@done` until `/verify` returns CONFIRMED. Nothing ships `@proposed`.
 
@@ -125,7 +152,7 @@ Feature files carry a lifecycle tag at the top of the file:
 - `Scenario Outline:` must have an `Examples:` table
 - `Background:` must not be empty; not used for single-scenario files
 - No duplicate tags on a single scenario or feature block
-- Terminology (nouns, verbs) must be consistent across all feature files
+- Terminology must be consistent across all feature files
 
 ### Audit checks (performed by `/feature-doc` until Strux takes over)
 1. **Terminology** — same nouns/verbs as existing files for the same concepts
@@ -158,8 +185,7 @@ Mention any C4 DSL element names that are affected.]
 
 ## Decision
 
-[What was decided. Reference DSL element names where relevant — this is
-what Strux's ADR sensor cross-checks against the architecture model.]
+[What was decided. Reference DSL element names where relevant.]
 
 ## Considered Options
 
@@ -174,20 +200,7 @@ what Strux's ADR sensor cross-checks against the architecture model.]
 ```
 
 ### When to write an ADR
-Apply this test: *If this decision were reversed in six months, would it require migrating data, refactoring multiple files, or changing how other features work?* If yes — write an ADR. If no — skip it.
-
-**Warrants an ADR:** choosing a persistence strategy, selecting a communication protocol between services, deciding how state is managed, adding or removing a container in the C4 model.
-
-**Does not warrant an ADR:** adding a button, adding a command, changing a label, adding a new scenario to an existing feature.
-
-### Linting rules (enforced by Strux `adr-rules`)
-- Filename must match `^ADR-(\d{3})-(.+)\.md$`
-- Numbers must be monotonic — no gaps, no duplicates
-- Required fields: Status, Date, Decision makers
-- Valid statuses: `Proposed`, `Accepted`, `Superseded`, `Rejected`
-- Required sections: Context, Decision, Consequences
-- No empty sections
-- Superseded ADRs must link to the replacing ADR
+*If this decision were reversed in six months, would it require migrating data, refactoring multiple files, or changing how other features work?* If yes — write an ADR.
 
 ---
 
@@ -196,55 +209,42 @@ Apply this test: *If this decision were reversed in six months, would it require
 ### Location
 `docs/architecture/architecture.dsl` — single file, single source of truth.
 
-### Format
-Structurizr DSL. Semantic-first: declares systems, containers, components, and relationships. Visual layout is generated from this, not embedded in it.
-
 ### Current / Target duality
 Every element is tagged `Current` or `Target`:
-
 - **`Current`** — exists in the codebase now
 - **`Target`** — planned; corresponds to an accepted ADR but not yet implemented
 
-```
-workspace {
-  model {
-    system = softwareSystem "Name" "Description" {
-      containerA = container "Name" "Description" "Technology" "Current"
-      containerB = container "Name" "Description" "Technology" "Target"
-
-      containerA -> containerB "Relationship" "Protocol" "Current"
-    }
-  }
-}
-```
-
-**Rule:** Every `Target` element must have a corresponding `Accepted` ADR. Every `Current` element must match an implemented component verifiable in the codebase. This is what Strux's `diagram-rules` sensor audits.
+**Rule:** Every `Target` element must have a corresponding `Accepted` ADR. Every `Current` element must match an implemented component verifiable in the codebase.
 
 ### Generated views
-`docs/architecture/diagrams/` contains Mermaid files generated from the DSL. These are compiled outputs — do not edit them manually. They are regenerated by `strux generate-diagrams` (Current view) or `strux generate-diagrams --target` (Current + Target view).
-
-### When to update
-Update `architecture.dsl` when:
-- A new container or component is added or removed
-- A relationship between containers changes
-- A previously `Target` element is implemented (change tag to `Current`)
-- A new ADR is accepted that affects the structural model
-
-The `/architecture` skill owns this update process.
+`docs/architecture/diagrams/` — Mermaid files generated from the DSL. Never edit manually.
 
 ---
 
 ## Tickets
 
-### Medium preference order
-Skills resolve the task tracking medium in this order, then ask for lightweight confirmation before proceeding:
+### Ticket as folder
+Each ticket is a directory under `work/`:
 
-1. **Jira** — if MCP is configured and a project key is resolvable from context
-2. **TIX files** — if `tickets/` directory exists with `tix-manifest.json`
-3. **Local plan** — if a `plan.md` or `PLAN.md` with checkboxes exists in the working directory
+```
+work/TIX-NNN-slug/
+  ticket.md          — always present
+  screenshots/       — optional
+  evidence/          — optional
+  logs/              — optional (typically git-ignored)
+```
+
+The `ticket.md` file is the minimum viable ticket. Subfolders accumulate as the work generates artifacts.
+
+### Medium preference order
+Skills resolve the task tracking medium in this order:
+
+1. **Jira** — if MCP is configured and a project key is resolvable
+2. **TIX files** — if `work/` directory exists with `tix-manifest.json`
+3. **Local plan** — if a `plan.md` with checkboxes exists
 4. **None** — ask the user to declare
 
-On resolution, the skill states: *"I'll use [medium] for task tracking — proceed?"* and continues unless redirected.
+On resolution: *"I'll use [medium] for task tracking — proceed?"* Continue unless redirected.
 
 ### Capability matrix
 | Operation | Jira | TIX files | Local plan |
@@ -258,16 +258,14 @@ On resolution, the skill states: *"I'll use [medium] for task tracking — proce
 | close with evidence pointer | ✓ | ✓ | ✓ (check off) |
 | sprint / priority / watchers | ✓ | — | — |
 
-Skills degrade gracefully when a capability is unavailable — they note it and continue with what's possible.
-
-### TIX file format
+### TIX ticket.md format
 ```markdown
 ---
 id: TIX-NNN
 title: [Ticket Title]
 status: [todo | ready | in-progress | done]
 priority: [low | medium | high]
-type: [feat | fix | chore]
+type: [feat | fix | chore | refactor]
 impact_scope:
   - [packages/component-name]
 features:
@@ -277,12 +275,13 @@ adrs:
 architecture_updated: [true | false]
 depends_on:
   - [TIX-NNN]
+jira: [PROJ-123]           # optional
 ---
 
 [Description of work. Bullet points for sub-tasks.]
 ```
 
-### Ticket readiness gates (enforced by Strux `strux-tix`)
+### Ticket readiness gates
 A ticket is `ready` (eligible for implementation) when:
 - Feature file is linked and `@accepted`
 - ADR impact has been assessed (`architecture_updated` field populated)
@@ -292,32 +291,32 @@ The `/plan` skill checks readiness before producing an implementation plan.
 
 ---
 
+## Release Evidence
+
+Formal attestations live in `docs/releases/`. Each file covers one released version:
+
+```markdown
+---
+version: 1.2.0
+date: YYYY-MM-DD
+verified_by: /verify
+---
+
+## Evidence
+
+- Test results: work/TIX-NNN-slug/evidence/unit.json
+- Screenshot: work/TIX-NNN-slug/screenshots/post-deploy.png
+```
+
+---
+
 ## Contracts
 
 ### Naming convention
 `CON-NNN-slug.contract.json` — sequential, referenced in ADRs and DSL relationship annotations.
 
 ### Format
-JSON Schema (draft-07). Defines the data shape of a boundary between two components.
-
-```json
-{
-  "$schema": "http://json-schema.org/draft-07/schema#",
-  "id": "CON-NNN",
-  "title": "[Title] Contract Schema",
-  "type": "object",
-  "properties": {
-    "propertyName": {
-      "type": "string",
-      "description": "Description"
-    }
-  },
-  "required": ["propertyName"]
-}
-```
-
-### When to write a contract
-When an ADR defines a communication boundary between two containers or components and the shape of that communication matters for correctness. Referenced in DSL relationship annotations: `containerA -> containerB "..." "..." "contract:CON-NNN"`.
+JSON Schema (draft-07). Defines data shape at a component boundary.
 
 ---
 
@@ -329,30 +328,9 @@ When an ADR defines a communication boundary between two containers or component
 ### Format
 JSON, XState-compatible. Models the lifecycle of a process or entity.
 
-```json
-{
-  "id": "STATE-NNN",
-  "name": "[Title] Statechart",
-  "initial": "idle",
-  "states": {
-    "idle": { "on": { "START": "running" } },
-    "running": {
-      "on": {
-        "SUCCESS": "done",
-        "FAIL": "failed"
-      }
-    },
-    "done": { "type": "final" },
-    "failed": { "type": "final" }
-  }
-}
-```
-
 ---
 
 ## Cross-artifact relationships
-
-The relationships between artifact families are what Strux's graph resolver (`strux-synthesizer`) compiles into a relational model for auditing:
 
 ```
 Ticket  ──links to──►  Feature file  ──@accepted before──►  Implementation
@@ -362,25 +340,21 @@ Ticket  ──links to──►  Feature file  ──@accepted before──►  
                     └──governs──►  Contract / Statechart
 ```
 
-When the `/doc-sync` skill runs post-implementation, it verifies this graph is internally consistent: tickets closed, feature files `@done`, DSL `Target` elements promoted to `Current`, no orphaned ADRs.
+When `/doc-sync` runs post-implementation, it verifies this graph is internally consistent: tickets closed, feature files `@done`, DSL `Target` elements promoted to `Current`, no orphaned ADRs.
 
 ---
 
 ## Skill chain reference
 
-The full chain, with artifact touchpoints:
-
 | Stage | Skill | Reads | Writes / Updates |
 |---|---|---|---|
-| Brainstorm | `/brainstorm` | Existing features, ADRs | Draft ticket, draft feature (`@proposed`) |
+| Brainstorm | `/brainstorm` | Existing features, ADRs | Draft ticket (`work/`), draft feature (`@proposed`) |
 | Feature spec | `/feature-doc` | Feature files, ADRs | Feature file (`@accepted`), ADR if needed |
-| Architecture | `/architecture` | `architecture.dsl`, ADRs | `architecture.dsl` (Current/Target), ADR |
+| Architecture | `/architecture` | `architecture.dsl`, ADRs | `architecture.dsl`, ADR |
 | Context load | `/orient` | Ticket, features, ADRs, DSL | Nothing — loads into context |
 | Planning | `/plan` | Ticket (readiness), features, ADRs | Nothing — produces plan for approval |
 | Implementation | `/implement` | Plan, feature file | Ticket → `in-progress` |
-| Testing | `/test` | — | Test results artifact |
-| Deploy | `/deploy` | — | Install artifact |
-| Verification | `/verify` | — | Evidence artifact |
+| Verification | `/verify` | — | Evidence artifact (`work/TIX-NNN/evidence/`) |
 | Doc sync | `/doc-sync` | All of the above | Feature → `@done`, DSL Target → Current, ticket → `done` |
 | Bug triage | `/bug` | Feature files, ticket | Gap scenario or conflict note in feature file |
 
