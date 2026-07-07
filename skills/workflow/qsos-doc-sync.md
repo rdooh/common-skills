@@ -75,7 +75,28 @@ If a decision slipped through undocumented, write the ADR now (status `Accepted`
 
 ---
 
-## Step 6 — Run Strux if available
+## Step 6 — Check for stale lifecycle tags
+
+Read `work/tix-manifest.json`. For the closing ticket and any tickets linked as dependencies that are also now `done`:
+
+- Any feature file still tagged `@proposed` when its ticket is `done` → flag `[STALE_TAG]` and correct it now
+- Any feature file still tagged `@accepted` (never moved to `@in-progress`) when its ticket is `done` → flag `[SKIPPED_LIFECYCLE]` and note it
+
+Also scan all other feature files in `docs/features/` for the same condition — a batch close can leave orphaned tags from related work.
+
+If the manifest does not exist, skip this step and note the absence.
+
+---
+
+## Step 6b — Note code dependency drift (manual check)
+
+Read `docs/architecture/architecture.dsl`. For each container element that was changed or added during this ticket's implementation, ask: does the import/dependency structure in the code still match the `->` relationships declared in the DSL?
+
+This is a lightweight manual check — scan the changed files for `require`, `import`, or equivalent statements and compare to DSL relationships. Flag any discrepancy as `[DEPENDENCY_DRIFT]`. Full automated detection requires Strux's `sync-rules` sensor — note if a deeper check is needed.
+
+---
+
+## Step 7 — Run Strux if available
 
 Execute `strux diagnose` and include its output in the report. Strux will audit:
 - Gherkin rules on the updated feature file
@@ -87,14 +108,14 @@ If Strux is not available, note this and proceed with the manual checks above as
 
 ---
 
-## Step 7 — Update lifecycle and close ticket
+## Step 8 — Update lifecycle and close ticket
 
 1. Set feature file lifecycle tag to `@done`
 2. Call `/task close <id> <evidence pointer>` — the evidence pointer is the artifact reference from `/qsos-verify` (test result path, screenshot, log excerpt, etc.)
 
 ---
 
-## Step 8 — Produce sync report
+## Step 9 — Produce sync report
 
 ```
 DOC SYNC REPORT
@@ -113,6 +134,14 @@ ADR GAPS FILLED:
 BEHAVIORAL DRIFT:
   - Scenario "<name>": <match | drift — <description and resolution>>
   [or: none]
+
+STALE TAGS:
+  - [STALE_TAG] <feature> — corrected to @done
+  [or: none]
+
+DEPENDENCY DRIFT:
+  - [DEPENDENCY_DRIFT] <element> — import found with no DSL relationship
+  [or: none | requires Strux sync-rules for full check]
 
 STRUX: <output summary | not available>
 

@@ -74,6 +74,12 @@ skills:
       - path: ~/.claude/commands/qsos-bug.md
         mode: symlink
 
+  - name: qsos-audit
+    source: skills/workflow/qsos-audit.md
+    install_to:
+      - path: ~/.claude/commands/qsos-audit.md
+        mode: symlink
+
   - name: qsos-chain-design
     source: skills/workflow/qsos-chain-design.md
     install_to:

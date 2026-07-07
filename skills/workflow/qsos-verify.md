@@ -73,6 +73,18 @@ Select the appropriate evidence type from the catalog below. If the context does
 - Artifact: The actual stdout/stderr from running the command
 - Minimum: Output that demonstrates the correct behavior, not just exit 0
 
+**Contract / schema validation**
+- Use when the claim is that a component's output conforms to a defined interface contract
+- Tool: JSON Schema validator (ajv, jsonschema, etc.) run against actual output
+- Artifact: Validator output showing the payload against the schema — pass or specific violations
+- Minimum: Named schema (`CON-NNN`), actual payload, and validator result — not "it looks right"
+
+**Statechart / lifecycle coverage**
+- Use when the claim is that a process correctly implements a state machine or lifecycle
+- Tool: XState inspector, test harness driving transitions, or a feature file scenario executed against the implementation
+- Artifact: Transition log or test output showing states visited and events fired
+- Minimum: Evidence that the specific transitions under test were exercised — not just that the final state was reached
+
 ---
 
 ## Step 3 — Gather the evidence

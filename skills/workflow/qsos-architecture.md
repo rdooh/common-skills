@@ -105,7 +105,21 @@ When creating an ADR:
 
 ---
 
-## Step 7 — Deliver verdict
+## Step 7 — ADR coverage check
+
+After updating the DSL, verify cross-coverage in both directions:
+
+**DSL → ADR (justification check)**
+For each `softwareSystem`, `container`, or `component` element you added or changed, confirm that at least one accepted ADR references it by name or ID in its body text. If none does, the element is unjustified — create or update an ADR to cover it, or flag `[DSL_UNJUSTIFIED]` in the verdict if deferring.
+
+**ADR → DSL (reference check)**
+For each ADR created or updated in this skill run, confirm that its `ADR-NNN` identifier appears somewhere in `architecture.dsl`. If not, add a comment reference in the DSL or note `[ADR_UNLINKED]` in the verdict.
+
+This is a lightweight pass — it does not require reading every existing ADR, only the ones touched in this session and the elements just modified.
+
+---
+
+## Step 8 — Deliver verdict
 
 ```
 ARCHITECTURE UPDATE
@@ -120,6 +134,10 @@ ADR: not required | <path> — created | updated — <ADR-NNN: title>
 DUALITY AUDIT:
   Target elements with no ADR: none | <list — BLOCKED>
   Current elements unverifiable in code: none | <list — NOTE>
+
+COVERAGE AUDIT:
+  DSL elements with no justifying ADR: none | <list — [DSL_UNJUSTIFIED]>
+  ADRs not referenced in DSL: none | <list — [ADR_UNLINKED]>
 
 GENERATED VIEWS: not regenerated — run `strux generate-diagrams` to update docs/architecture/diagrams/
 
