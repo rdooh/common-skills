@@ -6,7 +6,7 @@ description: Compliance pre-flight — check ADR integrity, Gherkin style, featu
 
 ## Core Principle
 
-The chain produces artifacts. This skill checks them. It is not a gate tied to any single stage — run it anytime: before planning to confirm docs are clean, before closing to confirm nothing drifted, or as a standalone health check on a project you have just inherited. When Strux is present, defer to it. When it is not, this skill covers the most important checks manually.
+The chain produces artifacts. This skill checks them. It is not a gate tied to any single stage — run it anytime: before planning to confirm docs are clean, before closing to confirm nothing drifted, or as a standalone health check on a project you have just inherited.
 
 ---
 
@@ -125,14 +125,6 @@ NOTES: <N> items worth addressing | none
 
 AUDIT VERDICT: CLEAN | ISSUES FOUND — <blocker count> blocker(s), <note count> note(s)
 ```
-
----
-
-## Step 7 — Delegate to Strux if available
-
-If `strux` is available in the project (`strux check` runs without error), run it and append its output to the report under a `STRUX:` section. Strux supersedes this skill's manual checks — where Strux and this skill disagree, trust Strux.
-
-If Strux is not available, note `STRUX: not available — manual checks only`.
 
 ---
 
