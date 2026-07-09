@@ -28,6 +28,8 @@ State the plan reference: which ticket, which feature file, how many items in th
 
 Call `/task start` with the active ticket ID. This is not optional — invisible work is untracked work.
 
+If the project uses Jira, assign the ticket at creation time. An unassigned Jira ticket is a stuck ticket.
+
 ---
 
 ## Step 3 — Set feature lifecycle
@@ -65,6 +67,21 @@ Before declaring implementation complete, verify:
 - No new dependency was introduced that wasn't present before
 
 If any unplanned change is discovered, surface it now — do not omit it from the record.
+
+---
+
+## Step 5b — Commit with ticket reference
+
+Every commit made during implementation must include the **Jira ticket key** in the commit message subject when one exists. Local-only identifiers (work/ tickets, todo numbers) do not count.
+
+```
+feat(EN-72): place all 267 SPs into pipeline-dag.yaml
+fix(EN-45): correct edge direction in dag-parser
+```
+
+If a commit covers incidental work with no Jira ticket (e.g. a dependency bump), note `(no ticket)` explicitly so it is a conscious decision, not an oversight.
+
+**Before pushing**, scan the outgoing commits for any missing Jira key. Amend if not yet pushed; flag explicitly if already pushed.
 
 ---
 

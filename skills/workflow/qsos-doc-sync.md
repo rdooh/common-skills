@@ -64,7 +64,7 @@ If `architecture_updated` was `true` in the ticket frontmatter, confirm the DSL 
 
 ## Step 5 — Check ADR completeness
 
-Review the implementation decisions made. Apply the 6-month reversal test: was any choice made during implementation that would have warranted an ADR, but none was written?
+Review the implementation decisions made. Apply the 30-minute reversal test: was any choice made during implementation that would have warranted an ADR, but none was written? The bar is low — if reversing the decision would cost more than 30 minutes in migration, refactoring, or untangling dependencies, it deserves an ADR.
 
 Common triggers:
 - A library was chosen for a non-trivial reason

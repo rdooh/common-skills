@@ -123,7 +123,15 @@ Does this file describe behavior that clearly belongs to a different feature are
 
 Apply this test to determine if an ADR is needed:
 
-> *If this decision were reversed in six months, would it require migrating data, refactoring multiple files, or changing how other features work?*
+> *Would reversing this decision cost more than 30 minutes — in migration, refactoring, or untangling dependencies?*
+
+An ADR takes minutes to write. If reversing a decision would cost even an hour of future work, the ADR pays for itself. The bar is low by design — aim for roughly twice as many ADRs as feel "obviously necessary." Prefer writing a short ADR over skipping one.
+
+Common triggers worth recording:
+- A storage format or schema was chosen
+- A component boundary was established that other code will depend on
+- A library or API was selected for a non-trivial reason
+- A pattern was introduced that will govern similar future work
 
 If yes — write or update an ADR.
 If no — skip this step and note "ADR: not required" in the verdict.
