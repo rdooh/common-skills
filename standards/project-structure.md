@@ -44,6 +44,71 @@ They are complementary. As compliance tooling matures, skills delegate their aud
 
 ---
 
+## Subprojects
+
+A **subproject** is any directory within a repo that has its own `catalog-info.yaml`. The presence of that file is the single signal that QSOS uses to treat the directory as a self-contained unit with its own documentation and ticket space.
+
+### Layout
+
+A subproject mirrors the root layout, scoped to its own directory:
+
+```
+<subproject>/
+  catalog-info.yaml          — component identity and QSOS annotations
+  docs/
+    features/                — Gherkin feature files for this component only
+    decisions/               — ADRs for this component only
+  work/
+    <PREFIX>-NNN-slug/       — tickets scoped to this component
+      ticket.md
+      evidence/
+  testing/
+    manifest.json            — test runner declaration for this component
+```
+
+### catalog-info.yaml annotation
+
+Every subproject's `catalog-info.yaml` must declare a `qsos.io/ticket-prefix` annotation. The prefix is ≤5 characters, uppercase, and unique across all subprojects in the repo.
+
+```yaml
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: my-component
+  annotations:
+    qsos.io/ticket-prefix: "MYCO"
+spec:
+  type: tool
+  lifecycle: experimental
+  owner: rob
+```
+
+When QSOS skills (brainstorm, orient, plan, etc.) run inside a subproject directory, they:
+1. Detect `catalog-info.yaml` in the current or nearest ancestor directory (stopping at the repo root)
+2. Read `qsos.io/ticket-prefix` from annotations
+3. Write feature files to `<subproject>/docs/features/`
+4. Write tickets to `<subproject>/work/<PREFIX>-NNN-slug/`
+5. Resolve `features:` and `adrs:` paths in ticket frontmatter relative to the subproject root
+
+If no `catalog-info.yaml` is found, QSOS falls back to the repo root `docs/` and `work/`.
+
+### Ticket numbering
+
+Ticket numbers (`NNN`) are globally unique across the entire repo regardless of prefix. Do not reindex when moving tickets into a subproject — the git history references the original numbers. Numbers only reset when starting a genuinely new repo.
+
+### Catalog lifecycle invariant
+
+`spec.lifecycle` in `catalog-info.yaml` reflects the component's overall maturity. QSOS enforces:
+
+| catalog lifecycle | permitted feature tag states |
+|---|---|
+| `experimental` | any (`@proposed` through `@done`) |
+| `production` | only `@done` or `@deprecated` — no `@proposed` or `@in-progress` |
+
+A component must not be promoted to `lifecycle: production` while any of its feature files carry `@proposed` or `@in-progress`. `/qsos-doc-sync` checks this invariant at close time and flags a violation if it would be breached.
+
+---
+
 ## Standard Project Layout
 
 ```
@@ -226,6 +291,17 @@ Every element is tagged `Current` or `Target`:
 
 ## Tickets
 
+### Ticket prefix
+
+In a subproject with a `qsos.io/ticket-prefix` annotation, tickets use that prefix instead of `TIX-`:
+
+```
+work/ADDON-017-bdd-lifecycle-toolbar/
+  ticket.md
+```
+
+At the repo root (no `catalog-info.yaml`), tickets use `TIX-`. Numbers are globally unique across both spaces — never reuse a number, never reindex.
+
 ### Ticket as folder
 Each ticket is a directory under `work/`:
 
@@ -373,7 +449,7 @@ When `/doc-sync` runs post-implementation, it verifies this graph is internally 
 | Planning | `/plan` | Ticket (readiness), features, ADRs | Nothing — produces plan for approval |
 | Implementation | `/implement` | Plan, feature file | Ticket → `in-progress` |
 | Verification | `/verify` | — | Evidence artifact (`work/TIX-NNN/evidence/`) |
-| Doc sync | `/doc-sync` | All of the above | Feature → `@done`, DSL Target → Current, ticket → `done` |
+| Doc sync | `/doc-sync` | All of the above | Feature → `@done`, DSL Target → Current, ticket → `done`; checks catalog lifecycle invariant if `catalog-info.yaml` present |
 | Bug triage | `/bug` | Feature files, ticket | Gap scenario or conflict note in feature file |
 
 `/task` is not a stage — it is a cross-cutting adapter called by every skill that needs to read or write task state.
