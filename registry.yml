@@ -5,87 +5,11 @@
 #
 # mode: symlink (default) — changes to source are immediately live
 # mode: copy — use when the target environment cannot follow symlinks
+#
+# Note: QSOS workflow skills (qsos-*) have moved to the qsos/ repository.
+# Deploy them with: cd /path/to/qsos && ./deploy.sh
 
 skills:
-  # QSOS workflow chain
-  - name: qsos
-    source: skills/workflow/qsos.md
-    install_to:
-      - path: ~/.claude/commands/qsos.md
-        mode: symlink
-
-  - name: qsos-task
-    source: skills/workflow/qsos-task.md
-    install_to:
-      - path: ~/.claude/commands/qsos-task.md
-        mode: symlink
-
-  - name: qsos-brainstorm
-    source: skills/workflow/qsos-brainstorm.md
-    install_to:
-      - path: ~/.claude/commands/qsos-brainstorm.md
-        mode: symlink
-
-  - name: qsos-feature-doc
-    source: skills/workflow/qsos-feature-doc.md
-    install_to:
-      - path: ~/.claude/commands/qsos-feature-doc.md
-        mode: symlink
-
-  - name: qsos-architecture
-    source: skills/workflow/qsos-architecture.md
-    install_to:
-      - path: ~/.claude/commands/qsos-architecture.md
-        mode: symlink
-
-  - name: qsos-orient
-    source: skills/workflow/qsos-orient.md
-    install_to:
-      - path: ~/.claude/commands/qsos-orient.md
-        mode: symlink
-
-  - name: qsos-plan
-    source: skills/workflow/qsos-plan.md
-    install_to:
-      - path: ~/.claude/commands/qsos-plan.md
-        mode: symlink
-
-  - name: qsos-implement
-    source: skills/workflow/qsos-implement.md
-    install_to:
-      - path: ~/.claude/commands/qsos-implement.md
-        mode: symlink
-
-  - name: qsos-verify
-    source: skills/workflow/qsos-verify.md
-    install_to:
-      - path: ~/.claude/commands/qsos-verify.md
-        mode: symlink
-
-  - name: qsos-doc-sync
-    source: skills/workflow/qsos-doc-sync.md
-    install_to:
-      - path: ~/.claude/commands/qsos-doc-sync.md
-        mode: symlink
-
-  - name: qsos-bug
-    source: skills/workflow/qsos-bug.md
-    install_to:
-      - path: ~/.claude/commands/qsos-bug.md
-        mode: symlink
-
-  - name: qsos-audit
-    source: skills/workflow/qsos-audit.md
-    install_to:
-      - path: ~/.claude/commands/qsos-audit.md
-        mode: symlink
-
-  - name: qsos-chain-design
-    source: skills/workflow/qsos-chain-design.md
-    install_to:
-      - path: ~/.claude/commands/qsos-chain-design.md
-        mode: symlink
-
   # Domain-specific tools (not QSOS chain skills)
   - name: vscode-ext-load
     source: skills/workflow/vscode-ext-load.md
@@ -97,6 +21,12 @@ skills:
     source: skills/workflow/vscode-ext-test.md
     install_to:
       - path: ~/.claude/commands/vscode-ext-test.md
+        mode: symlink
+
+  - name: prerequisite-map
+    source: skills/thinking/prerequisite-map.md
+    install_to:
+      - path: ~/.claude/commands/prerequisite-map.md
         mode: symlink
 
 # Example entry (uncomment and adapt when adding skills):
