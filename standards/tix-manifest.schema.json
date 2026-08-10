@@ -1,0 +1,84 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/neoNGS/standards/main/tix-manifest.schema.json",
+  "title": "TIX Work Item Manifest Schema",
+  "description": "Canonical open schema for work/tix-manifest.json in the Unified Developer Standards Basket.",
+  "type": "object",
+  "required": ["tickets"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "project": { "type": "string" },
+    "version": { "type": "string" },
+    "tickets": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/ticket"
+      }
+    }
+  },
+  "additionalProperties": true,
+  "$defs": {
+    "ticket": {
+      "type": "object",
+      "required": ["id", "title", "status"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_]+-[0-9]+$",
+          "description": "Unique ticket ID with prefix (e.g. TIX-032, DEVKIT-001, ADDON-017)"
+        },
+        "title": {
+          "type": "string",
+          "description": "Short, descriptive title of the work item"
+        },
+        "status": {
+          "type": "string",
+          "enum": ["todo", "ready", "in-progress", "done"],
+          "description": "Canonical ticket lifecycle status"
+        },
+        "priority": {
+          "type": "string",
+          "enum": ["high", "medium", "low"],
+          "description": "Ticket priority level"
+        },
+        "type": {
+          "type": "string",
+          "enum": ["feat", "fix", "chore", "spike", "refactor"],
+          "description": "Work item classification type"
+        },
+        "depends_on": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "List of prerequisite ticket IDs"
+        },
+        "features": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Linked Gherkin feature file paths"
+        },
+        "adrs": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Linked MADR ADR file paths"
+        },
+        "jira": {
+          "type": "string",
+          "description": "Optional Jira issue key"
+        },
+        "note": {
+          "type": "string",
+          "description": "Optional developer note or summary"
+        },
+        "path": {
+          "type": "string",
+          "description": "Relative path to ticket detail markdown file (e.g. work/TIX-032-slug/TIX-032-slug.md)"
+        },
+        "closed_by": {
+          "type": "string",
+          "description": "Optional closing ticket ID reference"
+        }
+      },
+      "additionalProperties": true
+    }
+  }
+}
