@@ -67,7 +67,11 @@ Use this exact format for each capture in the batch:
 
 ### 4. Wait for User Approval
 
-Present the batch report and wait for explicit approval before executing any actions.
+Present the batch report using `AskUserQuestion` tool with button options:
+- Option 1: "Approve batch — execute all proposed actions"
+- Option 2: "Skip / modify — review individually"
+
+Wait for explicit approval before executing any actions.
 
 ### 5. Execute Actions
 
@@ -115,4 +119,4 @@ mcp__catalyst-os__update_capture({
 
 ## Notes
 
-**Skill location:** This skill is currently in `.claude/commands/` as project-local. CatalystOS-specific skills don't yet have a canonical home in the repo structure (see cap-20260924-003). May be relocated to `common-skills/catalyst/` or similar when infrastructure is clarified.
+**Skill location:** Committed to common-skills repo at `skills/catalyst/capture-processing.md` (commit bd75649). Symlinked to `~/.claude/commands/` via standard common-skills mechanism.
