@@ -29,12 +29,46 @@ skills:
       - path: ~/.claude/commands/prerequisite-map.md
         mode: symlink
 
+  - name: verify-with-evidence
+    source: skills/workflow/verify-with-evidence.md
+    install_to:
+      - path: ~/.claude/commands/verify-with-evidence.md
+        mode: copy
+      - path: ~/.cursor/skills/verify-with-evidence.md
+        mode: copy
+      - path: ~/.gemini/config/skills/verify-with-evidence.md
+        mode: copy
+
+  - name: mandate
+    source: skills/workflow/mandate.md
+    install_to:
+      - path: ~/.claude/commands/mandate.md
+        mode: copy
+      - path: ~/.cursor/skills/mandate.md
+        mode: copy
+      - path: ~/.gemini/config/skills/mandate.md
+        mode: copy
+
+  - name: verifier-agent
+    source: agents/verifier.md
+    install_to:
+      - path: ~/.claude/agents/verifier.md
+        mode: copy
+
 # Example entry (uncomment and adapt when adding skills):
 #
 # - name: deep-research
 #   source: skills/research/deep-research.md
 #   install_to:
 #     - path: ~/.claude/commands/deep-research.md
-#       mode: symlink
-#     - path: agent-os/standards/global/deep-research.md
-#       mode: symlink
+#       mode: copy
+#     - path: ~/.cursor/skills/deep-research.md
+#       mode: copy
+#     - path: ~/.gemini/config/skills/deep-research.md
+#       mode: copy
+
+  - name: agent-reporting
+    source: skills/comms/agent-reporting.md
+    install_to:
+      - path: ~/.claude/commands/agent-reporting.md
+        mode: symlink
