@@ -43,16 +43,49 @@ The user invokes `/mandate` with an optional argument: `$ARGUMENTS`
 
 Write (or revise) the mandate at `~/.claude/projects/{project-key}/memory/session_mandate_{short-id}.md`.
 
+#### Step 0: consistency check (on first set and on every revise)
+
+Before asking anything, read the sources of truth and look for conflicts. **Never resolve a conflict silently, in either direction.** Each one becomes a decision for the user: state the conflict and the evidence, give a recommendation and at least two real options, and record the chosen option with its reason and date under "Decisions" in the mandate. The repo's own rule is usually the recommended option, but it is not applied until the user picks it. Decisions are situational: they apply to this mandate only and are never written back as facts about the repo.
+
+Check:
+1. **Repo rules vs baseline.** The repo's `CLAUDE.md` (and the workspace one) against the baseline on branching, commits, tracking and tooling.
+2. **Stale references.** Do the ticket prefix, branch pattern and tool names in `CLAUDE.md` appear in recent history (`git log -40`, recent remote branches)? Report what is actually in use.
+3. **Tracking.** Does the chosen system of record exist here (in-repo ticket folder, Jira project in use, CatalystOS project)? Does the user actually use it for this work?
+4. **Git state.** Branch, clean or dirty, ahead or behind, hooks that would block a push.
+5. **Tools.** MCP servers or commands the repo expects: connected?
+6. **Collisions.** Another live mandate on the same repo or goal.
+7. **Age.** Anything you rely on that is more than about 30 days old: flag as possibly stale.
+
+Say plainly when a check could not be done.
+
 #### Step 1: setup questions (on first set and on every revise)
 
-Ask these together in one message, each with its recommended default marked. The owner can answer "defaults". Skip any the user's text already answers. On revise, show the current choice and ask whether it still holds.
+Ask together in one message, each with its recommended default marked. The owner can answer "defaults". Skip any the user's text already answers. On revise, show the current choice and ask whether it still holds.
 
 1. **Voice.** A) `af_heart`, speed 1.1, spoken prefix named after the project, e.g. "Interpret Report" (recommended). B) A different voice and prefix. C) Voice off.
 2. **Role.** A) Engineer and architect: builds, verifies, commits (recommended). B) Planner: docs, tickets and decisions only, no code. C) Investigator: read-only, reports findings.
-3. **Tracking.** A) CatalystOS is the system of record. B) In-repo tickets. C) Jira (also apply the Jira rules in the baseline).
-4. **Scope guard (always required).** The goal, the repo or directories in play, and what is out of scope. Never guess these. If the user declines to give the goal, write "TBD: not yet set" and ask again when work needs direction.
+3. **Tracking.** A) CatalystOS is the system of record. B) In-repo tickets. C) Jira (also apply the Jira rules in the baseline). D) None: just do the work and push. Use what Step 0 found to recommend; do not assume the repo's stated system is current.
+4. **The objective** (see below). Required.
 
 Everything else in the baseline applies without a question. If the user names a different choice for a baseline default (for example "ask before pushing", "fuller written reports", "spawn freely up to N agents", "also run the CatalystOS check after compaction"), record it under "Choices and overrides".
+
+#### The objective: treat it as a well-formed goal
+
+A vague mandate produces vague results, so the objective is shaped before work starts. Ask only what is still missing:
+
+| Question | What it fixes |
+| --- | --- |
+| In one sentence, what is the job, and who is it for? | A goal that is not fluffy |
+| Is it one job, an ongoing duty, or a direction? | When it ends; what "done" means |
+| How will we know it worked? Give at least one check that could fail. | A testable outcome |
+| What must not happen, and what limits apply (time, repos, approvals, deadlines)? | Constraints and out of scope |
+| What already exists, and where will the work be tracked? | Starting point and path to action |
+| How sure are we it is achievable, and what is unknown? | Risks and the first thing to learn |
+| What first step would show we are on track? | A first action |
+
+**Clarity bar.** The objective is *committed* when: the job is one sentence, the kind of goal is set (one job, ongoing duty or direction), there is at least one success check that could fail, constraints and out of scope are written, a first step is named, and Step 0 has nothing unresolved. Then reflect it back with one concrete example of success and ask for one reason it might be wrong. Do not ask "is that right?".
+
+**Unexamined is allowed.** If the user has not set the goal, record the status as *unexamined*. The only permitted work is to survey (read the repo, docs and history, and report what is there) within a stated time box, ending with a proposed goal for the user to shape. No implementation or other changes until the goal is committed, unless the user directs a specific task. Ask again when work needs direction.
 
 #### Step 2: write the file
 
@@ -69,8 +102,17 @@ metadata:
 **Mandate set {date} (session {short-id}).** Baseline: mandate-baseline v{n}. After compaction, reread this file and the baseline before acting.
 
 ## Objective
-{One or two sentences: what are we doing and why. Enough context that a reader with no
-conversation history understands the situation.}
+**Status:** {committed | unexamined}. **Kind:** {one job | ongoing duty | direction}.
+{One sentence: the job and who it is for, then two or three sentences of context. Enough
+for a reader with no conversation history.}
+- **Success checks:** {at least one observable check that could fail}
+- **Constraints:** {time, approvals, limits}
+- **Unknowns and confidence:** {what is unclear; how sure we are it is achievable}
+- **First step:** {or, if unexamined: the survey, its time box, and what it should produce}
+
+## Decisions
+{One line per conflict resolved at setup: the conflict, the option chosen, why, date.
+"None" if Step 0 found nothing.}
 
 ## Scope
 {Exactly which files, directories, packages or systems are in play. Absolute paths.
@@ -94,7 +136,7 @@ Prevents a post-compaction Claude from redoing completed work.}
 {What NOT to touch. Explicit. If another agent owns something, say so.}
 ```
 
-A thin Objective or Scope is a failed mandate, but a stated "TBD" is honest; a guessed value is not.
+A thin Objective or Scope is a failed mandate, but an honest *unexamined* status is not; a guessed value is.
 
 Also update MEMORY.md — replace any existing mandate line **for this session** (match by short-id) or append:
 `- [Active mandate ({short-id})](session_mandate_{short-id}.md) — {one-line summary}`

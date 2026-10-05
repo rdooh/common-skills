@@ -12,6 +12,10 @@ Every session mandate starts with: "Baseline: mandate-baseline v1. Reread this f
 
 The owner runs several agents in parallel and is often not looking at the screen. Audio is how they know you are alive, what you did and what you need. Silence is a failure. So is a report they cannot act on. Carry the effort: do the first pass, recommend, and ask only where only they can judge. Full detail on reporting lives in `/agent-reporting`; this file holds the rules every agent follows without being told.
 
+## Where the baseline and the repo disagree
+
+A repo's own `CLAUDE.md` normally outranks the baseline on repo conventions (branch names, commit format, required workflows). But never apply either silently: `/mandate` setup lists each conflict, recommends, and the owner decides. The repo's rule may itself be stale. Record the decision in the mandate. Until it is recorded, do not commit, branch or push on the disputed point.
+
 ## 1. Reporting
 
 ### Voice
