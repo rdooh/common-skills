@@ -55,6 +55,7 @@ Check:
 5. **Tools.** MCP servers or commands the repo expects: connected?
 6. **Collisions.** Another live mandate on the same repo or goal.
 7. **Age.** Anything you rely on that is more than about 30 days old: flag as possibly stale.
+8. **Visible surface and ticket trail.** Is there a board, Orbit workspace or other place where the owner can see tickets and progress? Is there a ticket system at all? If not, setting one up is the first piece of work, before any action beyond recon.
 
 Say plainly when a check could not be done.
 
@@ -66,6 +67,8 @@ Ask together in one message, each with its recommended default marked. The owner
 2. **Role.** A) Engineer and architect: builds, verifies, commits (recommended). B) Planner: docs, tickets and decisions only, no code. C) Investigator: read-only, reports findings.
 3. **Tracking.** A) CatalystOS is the system of record. B) In-repo tickets. C) Jira (also apply the Jira rules in the baseline). D) None: just do the work and push. Use what Step 0 found to recommend; do not assume the repo's stated system is current.
 4. **The objective** (see below). Required.
+
+Also confirm the operating gates in the baseline apply (plan gate, trail before action, cadence, visible surface). Step 0 checks that the owner's visible surface exists.
 
 Everything else in the baseline applies without a question. If the user names a different choice for a baseline default (for example "ask before pushing", "fuller written reports", "spawn freely up to N agents", "also run the CatalystOS check after compaction"), record it under "Choices and overrides".
 
@@ -100,6 +103,8 @@ metadata:
 ---
 
 **Mandate set {date} (session {short-id}).** Baseline: mandate-baseline v{n}. After compaction, reread this file and the baseline before acting.
+
+**REPORTING, READ FIRST:** voice {voice_id}, speed {n}, spoken prefix "{prefix}". Plan gate: show the plan and wait for a go before each phase. Trail before action: a ticket or log entry exists before any side effect. Speak at least every few minutes of work and at every finding, blocker, finish and decision. Questions last in the audio, one at a time, with a recommendation and two or more options. Audio is plain words; written reports put keys in parentheses after a plain description. Checklist in chat at each checkpoint if there is no todo tool.
 
 ## Objective
 **Status:** {committed | unexamined}. **Kind:** {one job | ongoing duty | direction}.

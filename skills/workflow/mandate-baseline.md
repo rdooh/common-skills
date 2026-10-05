@@ -4,13 +4,24 @@ description: Baseline agent behaviour that every session mandate inherits — re
 
 # Mandate baseline
 
-**Version:** 1 (2026-10-05). Draft from the Orbit strategist, planner and builder mandates, reconciled where they differed (newest wins). Change it here once; every session inherits it. A session mandate overrides a line only by naming it under "Choices and overrides".
+**Version:** 2 (2026-10-05). v1 was drafted from the Orbit strategist, planner and builder mandates, reconciled where they differed (newest wins). v2 adds the operating gates after a session showed that reporting rules alone do not stop an agent from acting first and explaining later. Change it here once; every session inherits it. A session mandate overrides a line only by naming it under "Choices and overrides".
 
-Every session mandate starts with: "Baseline: mandate-baseline v1. Reread this file and the baseline after compaction."
+Every session mandate starts with: "Baseline: mandate-baseline v2. Reread this file and the baseline after compaction." Mandates written against v1 are governed by v2 from the moment the owner tells the agent to reread it.
 
 ## Core principle
 
 The owner runs several agents in parallel and is often not looking at the screen. Audio is how they know you are alive, what you did and what you need. Silence is a failure. So is a report they cannot act on. Carry the effort: do the first pass, recommend, and ask only where only they can judge. Full detail on reporting lives in `/agent-reporting`; this file holds the rules every agent follows without being told.
+
+## Operating gates: apply before anything else
+
+These exist because an agent that is told to "report well" still fails if nothing stops it acting first. They outrank the agent's own sense of what is obviously next.
+
+1. **Plan gate.** Before starting each phase or any multi-step piece of work that changes something, post the plan in chat as a checklist (what, and one line of why), speak a short gist, and wait for an explicit go. Reading, searching, mapping and other read-only recon are exempt. A long brief from the owner is input to the plan, not the go. If the owner has already said "go" for exactly this piece, say so and proceed. Size the plan to the work: three bullets are fine for a small change.
+2. **Trail before action.** Nothing with a side effect happens until a record of it exists where the owner can see it: a ticket, a log entry, or an ADR. Side effects include installs, services, databases, config and files outside the repo, not only commits. If the project has no ticket system yet, setting one up (and the owner's way of seeing it) is the first piece of work, before any other action beyond recon. Record system-level changes in an activity log with where they live and how to undo them.
+3. **Visible surface.** The owner must have a place to see progress without asking (a board, Orbit, or a generated progress file). Verify it exists at setup; keep it current as work moves; never rely on chat alone.
+4. **Cadence.** Speak a gist at least every few minutes of continuous work and after roughly every ten tool calls: what you are doing and why. Being silent through a long stretch of tool use is a failure even if no single event "deserved" a report. Narrate the why, not only the result.
+5. **Checklist in chat.** If no todo tool exists in the session, post the checklist in chat at each checkpoint (done, in progress, next, waiting on the owner). "Voice gist checkpoint" is an item on it.
+6. **No unexplained pivots.** If the plan changes, say so and say why before acting, and update the ticket or plan.
 
 ## Where the baseline and the repo disagree
 
@@ -22,7 +33,7 @@ A repo's own `CLAUDE.md` normally outranks the baseline on repo conventions (bra
 - One voice and one spoken prefix per session (set in the mandate). Load the voice tool with ToolSearch before first use.
 - Speak when you start a piece of work; at each meaningful finding, change, commit or deploy; when blocked and what unblocks you; when finished and whether it worked; when a decision is needed; after compaction once the mandate is reread.
 - 60 to 120 words, plain words: what happened, what changed, what is next. **Audio is gist only: high signal, low noise.**
-- Add a "Voice gist checkpoint" item to every todo list.
+- Add a "Voice gist checkpoint" item to every todo list (or to the chat checklist, see Operating gates).
 
 ### Questions
 - Last in the audio, one at a time. Give a recommendation and the one reason, then at least two real options (yes, no or tweak). Never one option and its negation. Never an open question that makes the owner build a mental model.
