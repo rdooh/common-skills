@@ -54,10 +54,12 @@ A subproject mirrors the root layout, scoped to its own directory:
 
 ```
 <subproject>/
-  catalog-info.yaml          — component identity and QSOS annotations
+  catalog-mesh.yaml          — component identity declaration
   docs/
     features/                — Gherkin feature files for this component only
     decisions/               — ADRs for this component only
+    architecture/            — Structural diagrams & DSL models
+    reference/               — External standards, Council reports, research notes, & foundational specs
   work/
     <PREFIX>-NNN-slug/       — tickets scoped to this component
       ticket.md

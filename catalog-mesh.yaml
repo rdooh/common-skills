@@ -1,0 +1,14 @@
+apiVersion: catalog-mesh.io/v1
+kind: Component
+metadata:
+  name: common-skills
+  description: Unified developer standards, agent skills, and prompt templates.
+  prefix: "CSK-"
+  domain: "Agent Standards"
+  tags: ["skills", "standards", "prompt-templates"]
+  repo: "https://github.com/rdooh/common-skills"
+spec:
+  type: library
+  lifecycle: active
+  owner: robdooh
+  depends_on: []

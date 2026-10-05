@@ -1,40 +1,40 @@
 #!/usr/bin/env bash
 # install.sh — deploy skills to all registered harness paths
-# Reads install targets from the per-skill .targets files in adapters/.
-# Idempotent — safe to re-run. Uses symlinks by default.
+# Reads install targets from registry.yml.
+# Each target can specify mode: copy or mode: symlink.
+# Default mode is copy — symlinks are fragile across agent environments.
 #
-# Usage: ./install.sh [--copy]
-#   --copy  copy files instead of symlinking (useful when target can't follow symlinks)
+# Usage: ./install.sh [--symlink]
+#   --symlink  override all entries to use symlinks instead of copying
 
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-MODE="symlink"
-[[ "${1:-}" == "--copy" ]] && MODE="copy"
+GLOBAL_MODE=""
+[[ "${1:-}" == "--symlink" ]] && GLOBAL_MODE="symlink"
 
 installed=0
 missing=0
-
-# Each line in registry.yml that is a real skill entry looks like:
-#   - name: verify
-#     source: skills/workflow/verify.md
-#     install_to:
-#       - path: ~/.claude/commands/verify.md
-# We parse it with a small awk program rather than a YAML library.
+current_source=""
+current_mode="copy"
 
 while IFS= read -r line; do
-  # Strip leading whitespace
   trimmed="${line#"${line%%[![:space:]]*}"}"
 
   # Detect source: line
   if [[ "$trimmed" =~ ^source:[[:space:]]+(.+)$ ]]; then
     current_source="${BASH_REMATCH[1]}"
+    current_mode="copy"  # reset mode for each new source
+  fi
+
+  # Detect mode: line
+  if [[ "$trimmed" =~ ^mode:[[:space:]]+(.+)$ ]]; then
+    current_mode="${BASH_REMATCH[1]}"
   fi
 
   # Detect path: line under install_to
   if [[ "$trimmed" =~ ^-[[:space:]]+path:[[:space:]]+(.+)$ ]]; then
     target_path="${BASH_REMATCH[1]}"
-    # Expand ~ manually
     target_path="${target_path/#\~/$HOME}"
 
     if [[ -z "${current_source:-}" ]]; then
@@ -50,18 +50,18 @@ while IFS= read -r line; do
       continue
     fi
 
-    # Ensure target directory exists
     mkdir -p "$(dirname "$target_path")"
-
-    # Remove stale link or file
     [[ -L "$target_path" || -f "$target_path" ]] && rm "$target_path"
 
-    if [[ "$MODE" == "copy" ]]; then
-      cp "$source_path" "$target_path"
-      echo "  copied  $current_source → $target_path"
-    else
+    # Per-entry mode, overridden by global flag if set
+    effective_mode="${GLOBAL_MODE:-$current_mode}"
+
+    if [[ "$effective_mode" == "symlink" ]]; then
       ln -s "$source_path" "$target_path"
       echo "  linked  $current_source → $target_path"
+    else
+      cp "$source_path" "$target_path"
+      echo "  copied  $current_source → $target_path"
     fi
 
     ((installed++)) || true
