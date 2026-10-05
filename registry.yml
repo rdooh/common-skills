@@ -49,6 +49,16 @@ skills:
       - path: ~/.gemini/config/skills/mandate.md
         mode: copy
 
+  - name: mandate-baseline
+    source: skills/workflow/mandate-baseline.md
+    install_to:
+      - path: ~/.claude/commands/mandate-baseline.md
+        mode: copy
+      - path: ~/.cursor/skills/mandate-baseline.md
+        mode: copy
+      - path: ~/.gemini/config/skills/mandate-baseline.md
+        mode: copy
+
   - name: verifier-agent
     source: agents/verifier.md
     install_to:
