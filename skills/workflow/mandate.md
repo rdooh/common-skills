@@ -66,9 +66,10 @@ Ask together in one message, each with its recommended default marked. The owner
 1. **Voice.** A) `af_heart`, speed 1.1, spoken prefix named after the project, e.g. "Interpret Report" (recommended). B) A different voice and prefix. C) Voice off.
 2. **Role.** A) Engineer and architect: builds, verifies, commits (recommended). B) Planner: docs, tickets and decisions only, no code. C) Investigator: read-only, reports findings.
 3. **Tracking.** A) CatalystOS is the system of record. B) In-repo tickets. C) Jira (also apply the Jira rules in the baseline). D) None: just do the work and push. Use what Step 0 found to recommend; do not assume the repo's stated system is current.
-4. **The objective** (see below). Required.
+4. **Approval mode.** A) *check with me* (default: wait for a nod after each landed piece). B) *keep going* (nod on new plans and one-way steps only; reversible intermediate work proceeds).
+5. **The objective** (see below). Required.
 
-Also confirm the operating gates in the baseline apply (plan gate, trail before action, cadence, visible surface). Step 0 checks that the owner's visible surface exists.
+Also confirm the operating gates in the baseline apply (plan gate & approval mode, trail before action, cadence & audio content, visible surface). Step 0 checks that the owner's visible surface exists.
 
 Everything else in the baseline applies without a question. If the user names a different choice for a baseline default (for example "ask before pushing", "fuller written reports", "spawn freely up to N agents", "also run the CatalystOS check after compaction"), record it under "Choices and overrides".
 
@@ -102,9 +103,9 @@ metadata:
   type: project
 ---
 
-**Mandate set {date} (session {short-id}).** Baseline: mandate-baseline v{n}. After compaction, reread this file and the baseline before acting.
+**Mandate set {date} (session {short-id}).** Baseline: mandate-baseline v3. After compaction, reread this file and the baseline before acting.
 
-**REPORTING, READ FIRST:** voice {voice_id}, speed {n}, spoken prefix "{prefix}". Plan gate: show the plan and wait for a go before each phase. Trail before action: a ticket or log entry exists before any side effect. Speak at least every few minutes of work and at every finding, blocker, finish and decision. Questions last in the audio, one at a time, with a recommendation and two or more options. Audio is plain words; written reports put keys in parentheses after a plain description. Checklist in chat at each checkpoint if there is no todo tool.
+**REPORTING, READ FIRST:** voice {voice_id}, speed {n}, spoken prefix "{prefix}". Approval mode: {check with me | keep going}. Plan gate: show the plan and wait for a go before each phase. Trail before action: a ticket or log entry exists before any side effect. Audio: speak functionality delivered or decisions needed every few minutes. Chat: speak only at the four moments (needs you, something off, something landed, where things stand). Questions last in audio with recommendation and options. Audio is plain words; written reports put keys in parentheses after plain description.
 
 ## Objective
 **Status:** {committed | unexamined}. **Kind:** {one job | ongoing duty | direction}.
@@ -127,6 +128,7 @@ Flag anything in scope that needs extra caution (shared libraries, production da
 - Voice: {voice_id}, speed {n}, prefix "{prefix}"
 - Role: {engineer-architect | planner | investigator}
 - Tracking: {CatalystOS | in-repo | Jira}
+- Approval mode: {check with me | keep going}
 - Overrides of baseline lines: {none, or the line and the new rule}
 
 ## Session rules
